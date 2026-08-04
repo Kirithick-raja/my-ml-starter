@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which Content Signals Actually Predict Search Performance? — Ranking Signal Analysis</title>
+<style>
+  :root{
+    --ink:#1a2332;
+    --ink-soft:#4a5568;
+    --paper:#f7f8fa;
+    --card:#ffffff;
+    --line:#dfe3e8;
+    --accent:#2c5282;
+    --accent-soft:#e6eef7;
+    --confirmed:#2f855a;
+    --opposite:#c53030;
+    --mixed:#b7791f;
+    --wrinkle:#5a67d8;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono: "SF Mono", "Roboto Mono", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); line-height:1.6; font-size:17px;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px;}
+  header.hero{
+    border-bottom:1px solid var(--line);
+    padding:64px 0 40px;
+    background:linear-gradient(180deg, var(--accent-soft) 0%, var(--paper) 100%);
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:13px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:18px;
+  }
+  h1{
+    font-family:var(--serif); font-weight:600; font-size:2.3rem; line-height:1.18;
+    margin:0 0 20px; color:var(--ink);
+  }
+  .abstract{
+    font-size:1.05rem; color:var(--ink-soft); border-left:3px solid var(--accent);
+    padding-left:18px; margin-top:24px;
+  }
+  .meta{margin-top:28px; font-size:.9rem; color:var(--ink-soft); font-family:var(--mono);}
+  .meta a{color:var(--accent);}
+  main{padding:8px 0 80px;}
+  section{margin-top:56px;}
+  h2{
+    font-family:var(--serif); font-size:1.5rem; font-weight:600; margin:0 0 4px;
+    display:flex; align-items:baseline; gap:12px;
+  }
+  h2 .num{
+    font-family:var(--mono); font-size:.85rem; color:var(--accent); font-weight:600;
+  }
+  h2 + p.lede{color:var(--ink-soft); margin-top:10px; font-style:italic;}
+  p{margin:14px 0;}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:22px 24px; margin:20px 0;
+  }
+  figure{margin:28px 0;}
+  figure img{width:100%; border-radius:8px; border:1px solid var(--line); display:block;}
+  figcaption{
+    font-size:.88rem; color:var(--ink-soft); margin-top:10px; text-align:center;
+  }
+  table{width:100%; border-collapse:collapse; margin:18px 0; font-size:.92rem;}
+  th, td{text-align:left; padding:9px 12px; border-bottom:1px solid var(--line);}
+  th{font-family:var(--mono); font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft);}
+  td.num, th.num{text-align:right; font-family:var(--mono);}
+  .badge{
+    display:inline-block; padding:2px 10px; border-radius:999px; font-size:.78rem;
+    font-family:var(--mono); font-weight:600; color:#fff;
+  }
+  .badge.confirmed{background:var(--confirmed);}
+  .badge.opposite{background:var(--opposite);}
+  .badge.mixed{background:var(--mixed);}
+  .badge.wrinkle{background:var(--wrinkle);}
+  ul{padding-left:22px;}
+  li{margin:8px 0;}
+  .callout{
+    background:var(--accent-soft); border-left:3px solid var(--accent);
+    padding:16px 20px; border-radius:0 8px 8px 0; margin:20px 0; font-size:.95rem;
+  }
+  .callout.warn{background:#fdf2ec; border-left-color:var(--opposite);}
+  code{font-family:var(--mono); font-size:.85em; background:var(--accent-soft); padding:1px 5px; border-radius:4px;}
+  footer{
+    border-top:1px solid var(--line); padding:32px 0 60px; color:var(--ink-soft); font-size:.9rem;
+  }
+  footer a{color:var(--accent);}
+  @media (max-width:600px){
+    h1{font-size:1.7rem;} body{font-size:16px;} header.hero{padding:44px 0 30px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Ranking Signal Analysis · FlyRank ML Internship Capstone</div>
+    <h1>Which content signals actually predict search performance?</h1>
+    <p class="abstract">
+      We tested four commonly assumed content signals — freshness, keyword competition, content
+      format, and search position — against 30,000 real content pages to see which ones actually
+      associate with clicks, engagement, and visibility. Using grouped statistical comparisons and
+      a validated machine-learning model on the FlyRank dataset, we audited each assumption
+      against directly observed 90-day performance. Only one of four held cleanly: higher-competition
+      keywords reliably see fewer clicks, while freshness showed no consistent link to engagement and
+      content format ran opposite to expectation. A regression model trained to predict click-through
+      rate from content signals did not beat a simple average once client-level leakage was properly
+      controlled for — a negative result we report plainly rather than hide. We shipped a transparent,
+      rule-based review queue instead, flagging 750 stale, high-demand pages for human review.
+    </p>
+    <div class="meta">
+      Data: <a href="https://flyrank.ai" target="_blank">FlyRank ML Internship dataset</a> ·
+      Repo: <a href="https://github.com/Kirithick-raja/my-ml-starter" target="_blank">github.com/Kirithick-raja/my-ml-starter</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="intro">
+    <h2><span class="num">01</span> Introduction</h2>
+    <p>
+      Content teams managing thousands of pages face a resourcing problem, not a modeling luxury:
+      which pages deserve review effort first? Product intuition often leans on a handful of
+      assumptions — that stale content underperforms, that competitive keywords are worth chasing,
+      that certain formats naturally win more clicks. This project tests those assumptions directly
+      against real performance data, rather than taking them on faith, and asks a second question
+      that's easy to skip: does a trained model actually add value over a simple, transparent rule?
+    </p>
+    <p>
+      The decision this supports is concrete: which of ~30,000 live pages should a content team
+      look at first, and can that prioritization be trusted.
+    </p>
+  </section>
+
+  <section id="data">
+    <h2><span class="num">02</span> Data</h2>
+    <p>
+      This analysis uses the FlyRank ML Internship dataset — a public teaching slice of
+      <code>content_refresh_anonymized.csv</code>, 30,000 rows, one row per content page, covering
+      a 90-day performance window (clicks, impressions, engagement, and search position).
+    </p>
+    <p>Handling and exclusions, stated plainly:</p>
+    <ul>
+      <li><strong>1,205 rows</strong> had <code>avg_position == 0</code>, which the data dictionary
+        defines as "no position data available," not an actual first-place ranking. These were
+        excluded from any analysis involving position.</li>
+      <li><strong>2,096 rows</strong> (all <code>feedly article</code> content type) had no
+        keyword-context data at all (search volume, competition, CPC). These were kept but flagged
+        distinctly rather than silently imputed as zero-demand.</li>
+      <li>A <code>client_id</code> field identifies which of 32 clients each page belongs to. It was
+        used only to group train/test splits and is never disclosed in any exported artifact.</li>
+    </ul>
+  </section>
+
+  <section id="methodology">
+    <h2><span class="num">03</span> Methodology</h2>
+    <p>
+      Every candidate <strong>signal feature</strong> (content properties: word count, age, days
+      since update, content type, keyword competition, search volume) was kept strictly separate
+      from every <strong>outcome metric</strong> (clicks, CTR, position, engagement) — confirmed by
+      an explicit leakage check before any modeling began. Missing numeric signals were filled with
+      <code>-1</code>; missing categorical signals with <code>"unknown"</code>.
+    </p>
+    <p>
+      <strong>Baseline:</strong> a transparent rule — a page is flagged for review if it is stale
+      (<code>days_since_last_update ≥ 91</code>) <em>and</em> has real keyword demand
+      (<code>search_volume ≥ 100</code>).
+    </p>
+    <p>
+      <strong>Model:</strong> a RandomForestRegressor (200 trees, max depth 8) predicting
+      click-through rate from the 13 signal features.
+    </p>
+    <div class="callout">
+      <strong>Validation design.</strong> The dataset has only 32 clients, averaging ~937 pages
+      each. A plain random train/test split would let the same client appear on both sides,
+      leaking client-specific patterns (writing style, domain authority) across the split. We used
+      a <strong>grouped split by <code>client_id</code></strong> instead, verified to have zero
+      client overlap between train and test.
+    </div>
+  </section>
+
+  <section id="results">
+    <h2><span class="num">04</span> Results</h2>
+
+    <h3 style="font-family:var(--serif); font-size:1.15rem; margin-top:32px;">Four signal assumptions, audited</h3>
+    <table>
+      <tr><th>Claim tested</th><th>Verdict</th></tr>
+      <tr><td>Fresher content gets higher engagement</td><td><span class="badge mixed">MIXED</span></td></tr>
+      <tr><td>Higher-competition keywords get fewer clicks</td><td><span class="badge confirmed">CONFIRMED</span></td></tr>
+      <tr><td>Keyword-optimized formats get higher CTR</td><td><span class="badge opposite">OPPOSITE</span></td></tr>
+      <tr><td>Better position means higher CTR (the assumption behind FlyRank's <code>needs_ctr_fix</code> flag)</td><td><span class="badge wrinkle">CONFIRMED*</span></td></tr>
+    </table>
+    <figure>
+      <img src="img/signal_audit_verdicts.png" alt="Four panel chart showing measured values for freshness, competition, content type, and position tier against outcomes">
+      <figcaption>Real measured values behind each verdict. Freshness (top-left) isn't monotonic — the 91–180 day tier is lower than the even-staler 181+ tier. Content type (bottom-left) runs opposite to expectation: feedly articles, which carry zero keyword data, have the highest CTR.</figcaption>
+    </figure>
+    <p>
+      Only the competition→clicks relationship was clean and monotonic. Freshness alone isn't a
+      reliable lever for engagement. The claim that "keyword-optimized" content wins on CTR does
+      not hold — worth knowing before a content strategy leans on it. *The position→CTR pattern is
+      mostly confirmed, but page-1 and striking-distance pages had statistically indistinguishable
+      CTR, which shouldn't happen if position cleanly predicted CTR.
+    </p>
+
+    <h3 style="font-family:var(--serif); font-size:1.15rem; margin-top:32px;">One more signal, on its own</h3>
+    <figure>
+      <img src="img/word_count_vs_position.png" alt="Bar chart of average search position by word count tier">
+      <figcaption>Shorter content (under 1,000 words) has the best average position (8.7). Position gets worse through the 1,000–2,000 word tier (20.0) — not a clean "longer is better" story.</figcaption>
+    </figure>
+
+    <h3 style="font-family:var(--serif); font-size:1.15rem; margin-top:32px;">Model vs. baseline</h3>
+    <table>
+      <tr><th>Approach</th><th class="num">MAE</th><th class="num">R²</th></tr>
+      <tr><td>Baseline (predict mean CTR)</td><td class="num">0.554</td><td class="num">-0.066</td></tr>
+      <tr><td>Model (RandomForestRegressor)</td><td class="num">0.874</td><td class="num">-1.885</td></tr>
+    </table>
+    <figure>
+      <img src="img/baseline_vs_model.png" alt="Bar chart comparing MAE of baseline mean predictor versus RandomForest model">
+      <figcaption>Same held-out split, same metric. The model does not beat the baseline.</figcaption>
+    </figure>
+    <div class="callout warn">
+      <strong>Plainly stated:</strong> under an honest, client-grouped split, the trained model
+      performs <em>worse</em> than simply predicting the average CTR for every page. This isn't a
+      hidden failure — it's the headline finding of the modeling exercise, and it directly shaped
+      what shipped in the recommendations below.
+    </div>
+  </section>
+
+  <section id="limitations">
+    <h2><span class="num">05</span> Limitations</h2>
+    <ul>
+      <li><strong>Cross-sectional, not causal.</strong> This is a single 90-day snapshot. Every
+        relationship reported here is an observed association, not evidence of cause and effect —
+        content type, competition level, and freshness were not randomly assigned.</li>
+      <li><strong>The model underperforms.</strong> Because it lost to a two-line rule under honest
+        validation, this project ships the rule, not the model. That's a legitimate finding, not a
+        gap: it suggests CTR here may be more client-specific than purely content-signal-driven, or
+        that a richer feature set / more data would be needed to beat the baseline.</li>
+      <li><strong>Small samples in places.</strong> The freshness tiers 31–90 days and 181+ days
+        each contain only ~175 rows, well above the analysis floor but thin compared to the other
+        tiers — read those specific comparisons with extra caution.</li>
+      <li><strong>Single snapshot, no trend data.</strong> Nothing here can speak to how a page's
+        performance changes over time, seasonality, or the effect of any specific edit.</li>
+    </ul>
+  </section>
+
+  <section id="recommendations">
+    <h2><span class="num">06</span> Ranked recommendations</h2>
+    <p>
+      Because the trained model did not outperform the simple rule, this is the recommendation
+      engine that ships: a page is flagged <code>STALE_HIGH_DEMAND</code> when it hasn't been
+      updated in 91+ days <em>and</em> its target keyword has real search demand
+      (<code>search_volume ≥ 100</code>) — real opportunity being left on the table.
+    </p>
+    <figure>
+      <img src="img/reason_code_distribution.png" alt="Horizontal bar chart of reason code counts across the full dataset">
+      <figcaption>750 of 30,000 pages (2.5%) are flagged STALE_HIGH_DEMAND — the priority review queue.</figcaption>
+    </figure>
+    <div class="callout">
+      <strong>Before acting on any flagged page, a human should check:</strong>
+      <ul style="margin:10px 0 0;">
+        <li>Is it already ranking well? One flagged page in hand-review had <code>avg_position = 1.0</code>
+          — already the best possible position — despite being flagged. The rule sees staleness and
+          demand, not current success.</li>
+        <li>Is it a <code>feedly article</code> with no keyword data? The score isn't meaningful there.</li>
+      </ul>
+    </div>
+    <p><strong>No-go:</strong> never auto-publish content changes from this queue, and never use a
+      low score to justify reducing investment in a page that's already performing well — absence
+      from the list is not evidence of nothing to improve.</p>
+  </section>
+
+  <section id="reproducibility">
+    <h2><span class="num">07</span> Reproducibility</h2>
+    <p>
+      Every number on this page traces back to a notebook in the project repository, run against
+      the real dataset with a fixed <code>random_state=42</code> throughout.
+    </p>
+    <ul>
+      <li><a href="https://github.com/Kirithick-raja/my-ml-starter/tree/main/work/notebooks" target="_blank">Full weekly notebook history (w01–w07 + capstone)</a></li>
+      <li><a href="https://github.com/Kirithick-raja/my-ml-starter" target="_blank">Repository root</a></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Built on the <a href="https://flyrank.ai" target="_blank">FlyRank ML Internship dataset</a>.
+  </div>
+</footer>
+
+</body>
+</html>
